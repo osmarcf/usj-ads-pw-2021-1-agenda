@@ -36,10 +36,13 @@ public class ContatoController {
         contatoRepository.save(contato);
 
         // criar template
+        ModelAndView modelAndView = new ModelAndView("detalhes");
+
         // popular o template
+        modelAndView.addObject("contato", contato);
+
         // retornar
-        
-        return null;
+        return modelAndView;
     }
     
 }
