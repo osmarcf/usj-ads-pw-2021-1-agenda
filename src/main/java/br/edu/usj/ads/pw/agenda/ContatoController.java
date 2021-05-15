@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 
@@ -35,6 +36,23 @@ public class ContatoController {
         // retornar o template
         return modelAndView;
     }
+
+    @GetMapping(value="/detalhes/{id}")
+    public ModelAndView getDetalhes(@PathVariable Long id) {
+        // ler contato do banco pelo id
+        Contato contato = new Contato();
+        contato = contatoRepository.findById(id).get();
+
+        // instanciar o template
+        ModelAndView modelAndView = new ModelAndView("detalhes");
+
+        // preencher o template com o contato selecionado
+        modelAndView.addObject("contato", contato);
+
+        // retornar o template
+        return modelAndView;
+    }
+    
 
     @GetMapping(value="/cadastro")
     public ModelAndView getCadastro() {
@@ -65,5 +83,15 @@ public class ContatoController {
         // retornar
         return modelAndView;
     }
+
+    @GetMapping(value="/deletar/{id}")
+    public String getDeletar(@PathVariable Long id) {
+        // deletar o objeto com o id passado pelo parametro
+        contatoRepository.deleteById(id);
+
+        // retornar para / (raiz)
+        return "redirect:/";
+    }
+    
     
 }
