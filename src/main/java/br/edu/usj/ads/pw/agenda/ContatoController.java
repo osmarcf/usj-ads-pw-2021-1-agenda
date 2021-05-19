@@ -56,21 +56,17 @@ public class ContatoController {
 
     @GetMapping(value="/cadastro")
     public ModelAndView getCadastro() {
+        Contato contato = new Contato();
+
         ModelAndView modelAndView = new ModelAndView("cadastro");
+
+        modelAndView.addObject("contato", contato);
 
         return modelAndView;
     }
 
     @PostMapping(value="/adicionar")
-    public ModelAndView postAdicionar(@RequestParam String nome, @RequestParam String tipo, @RequestParam String telefone) {
-        // criar objeto do tipo contato
-        Contato contato = new Contato();
-
-        // preencher objeto contato com os dados que vieram
-        contato.setNome(nome);
-        contato.setTipo(tipo);
-        contato.setTelefone(telefone);
-
+    public ModelAndView postAdicionar(Contato contato) {
         // salvar no banco (usando repository)
         contatoRepository.save(contato);
 
@@ -83,6 +79,23 @@ public class ContatoController {
         // retornar
         return modelAndView;
     }
+
+    @GetMapping(value="/editar/{id}")
+    public ModelAndView getEditar(@PathVariable Long id) {
+        // selecionar contato do banco pelo id
+        Contato contato = new Contato();
+        contato = contatoRepository.findById(id).get();
+
+        // instanciar o template
+        ModelAndView modelAndView = new ModelAndView("cadastro");
+
+        // popular o template
+        modelAndView.addObject("contato", contato);
+
+        // retornar o template
+        return modelAndView;
+    }
+    
 
     @GetMapping(value="/deletar/{id}")
     public String getDeletar(@PathVariable Long id) {
